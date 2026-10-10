@@ -1,0 +1,4 @@
+n_cols,kernel,dur_us,grid,block,regs_per_thread,smem_bytes,est_occupancy_pct
+1024,"void (anonymous namespace)::softmax_warp_forward<float, float, float, 10, false, false>(fl",146.43,"[1024, 1, 1]","[32, 4, 1]",64,0,100
+4096,"void at::native::(anonymous namespace)::cunn_SoftMaxForwardReg<float, float, float, at::na",953.2,"[4096, 1, 1]","[1024, 1, 1]",29,128,100
+8192,"void at::native::(anonymous namespace)::cunn_SoftMaxForwardReg<float, float, float, at::na",1527.042,"[4096, 1, 1]","[1024, 1, 1]",35,128,100

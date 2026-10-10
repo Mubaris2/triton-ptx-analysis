@@ -63,28 +63,7 @@ def check_correctness(n_rows=4096, n_cols=1024):
     print("Correctness check passed: outputs match.")
     save_ptx(_, 'softmax_kernel.ptx')
 
-def warp_tuning(n_rows=4096):
-    rows = []
-    for n_cols in [1024, 4096, 8192]:
-        x = torch.randn(n_rows, n_cols, device='cuda', dtype=torch.float32)
-        gb = 2 * x.numel() * x.element_size() / 1e9
-        for nw in [2, 4, 8, 16]:
-            _, compiled = softmax_triton(x, num_warps=nw, return_compiled=True)
-            ms = triton.testing.do_bench(lambda: softmax_triton(x, num_warps=nw))
-            rows.append({
-                'n_cols': n_cols,
-                'num_warps': nw,
-                'n_regs': compiled.n_regs,
-                'n_spills': compiled.n_spills,
-                'ms': ms,
-                'gbps': gb / (ms * 1e-3),
-            })
-            print(rows[-1])
-
-    pd.DataFrame(rows).to_csv('results/softmax_warp_tuning.csv', index=False)
-
 if __name__ == '__main__':
     check_correctness()
     df = run_benchmark()
-    warp_tuning()
     plot(df)
